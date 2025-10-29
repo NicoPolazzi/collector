@@ -7,9 +7,9 @@ import (
 )
 
 type PerformanceSample struct {
-	ServiceName     string
-	ResponseTime_ms float64
-	Throughput_rps  float64
+	ServiceName    string
+	ResponseTimeMs float64
+	ThroughputRps  float64
 }
 
 type Sampler struct {
@@ -28,14 +28,16 @@ func (s *Sampler) SampleClusterData(ctx context.Context) []PerformanceSample {
 	throughputMap := convertToMap(throughputs)
 
 	// This logic maybe can be extracted. Here we produce the sample for each service contained in the cluster, that is
-	// the merging of the perfomance metrics.
-	samples := make([]PerformanceSample, 0, len(responseTimes))
+	// the merging of the performance metrics.
+
+	const initialSamplesCount int = 0
+	samples := make([]PerformanceSample, initialSamplesCount, len(responseTimes))
 	for key := range throughputMap {
 		if response, found := responseMap[key]; found {
 			sample := PerformanceSample{
-				ServiceName:     key,
-				ResponseTime_ms: response,
-				Throughput_rps:  throughputMap[key],
+				ServiceName:    key,
+				ResponseTimeMs: response,
+				ThroughputRps:  throughputMap[key],
 			}
 			samples = append(samples, sample)
 		}

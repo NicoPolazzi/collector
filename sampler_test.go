@@ -51,14 +51,14 @@ func TestSampleClusterData(t *testing.T) {
 
 		expected := []PerformanceSample{
 			{
-				ServiceName:     "test-service1",
-				ResponseTime_ms: 10.33,
-				Throughput_rps:  40.2,
+				ServiceName:    "test-service1",
+				ResponseTimeMs: 10.33,
+				ThroughputRps:  40.2,
 			},
 			{
-				ServiceName:     "test-service2",
-				ResponseTime_ms: 12.33,
-				Throughput_rps:  11.3,
+				ServiceName:    "test-service2",
+				ResponseTimeMs: 12.33,
+				ThroughputRps:  11.3,
 			},
 		}
 
@@ -90,9 +90,9 @@ func TestSampleClusterData(t *testing.T) {
 
 		expected := []PerformanceSample{
 			{
-				ServiceName:     "test-service2",
-				ResponseTime_ms: 10.33,
-				Throughput_rps:  11.3,
+				ServiceName:    "test-service2",
+				ResponseTimeMs: 10.33,
+				ThroughputRps:  11.3,
 			},
 		}
 
