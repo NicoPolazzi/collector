@@ -1,6 +1,10 @@
 package main
 
-import "context"
+import (
+	"cmp"
+	"context"
+	"slices"
+)
 
 type PerformanceSample struct {
 	ServiceName     string
@@ -20,20 +24,11 @@ func (s *Sampler) SampleClusterData(ctx context.Context) []PerformanceSample {
 	responseTimes := s.provider.GetResponseTime(ctx)
 	throughputs := s.provider.GetThroughput(ctx)
 
-	throughputMap := make(map[string]float64, len(throughputs))
-	for _, t := range throughputs {
-		if t.serviceName != "" {
-			throughputMap[t.serviceName] = t.value
-		}
-	}
+	responseMap := convertToMap(responseTimes)
+	throughputMap := convertToMap(throughputs)
 
-	responseMap := make(map[string]float64, len(responseTimes))
-	for _, r := range responseTimes {
-		if r.serviceName != "" {
-			responseMap[r.serviceName] = r.value
-		}
-	}
-
+	// This logic maybe can be extracted. Here we produce the sample for each service contained in the cluster, that is
+	// the merging of the perfomance metrics.
 	samples := make([]PerformanceSample, 0, len(responseTimes))
 	for key := range throughputMap {
 		if response, found := responseMap[key]; found {
@@ -46,5 +41,24 @@ func (s *Sampler) SampleClusterData(ctx context.Context) []PerformanceSample {
 		}
 	}
 
+	sortInAscendingOrder(samples)
 	return samples
+}
+
+func convertToMap[T Metric](slice []T) map[string]float64 {
+	lookupMap := make(map[string]float64, len(slice))
+
+	for _, x := range slice {
+		if x.GetServiceName() != "" {
+			lookupMap[x.GetServiceName()] = x.GetValue()
+		}
+	}
+
+	return lookupMap
+}
+
+func sortInAscendingOrder(s []PerformanceSample) {
+	slices.SortFunc(s, func(a, b PerformanceSample) int {
+		return cmp.Compare(a.ServiceName, b.ServiceName)
+	})
 }

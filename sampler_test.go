@@ -60,6 +60,5 @@ func TestSampleClusterData(t *testing.T) {
 		},
 	}
 
-	assert.ElementsMatch(t, expected, samples)
-
+	assert.Equal(t, expected, samples)
 }
