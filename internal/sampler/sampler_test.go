@@ -1,4 +1,4 @@
-package main
+package sampler
 
 import (
 	"context"
@@ -46,7 +46,7 @@ func TestSampleClusterData(t *testing.T) {
 			},
 		}
 
-		sampler := NewSampler(provider)
+		sampler := NewDataSampler(provider)
 		samples := sampler.SampleClusterData(context.Background())
 
 		expected := []PerformanceSample{
@@ -85,7 +85,7 @@ func TestSampleClusterData(t *testing.T) {
 			},
 		}
 
-		sampler := NewSampler(provider)
+		sampler := NewDataSampler(provider)
 		samples := sampler.SampleClusterData(context.Background())
 
 		expected := []PerformanceSample{

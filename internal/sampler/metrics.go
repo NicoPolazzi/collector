@@ -1,4 +1,4 @@
-package main
+package sampler
 
 type Metric interface {
 	GetServiceName() string

@@ -1,4 +1,3 @@
-// Package main represents the main module of the collector. It is the only entry point of the application.
 package main
 
 import (
@@ -6,8 +5,9 @@ import (
 	"log"
 	"time"
 
+	"github.com/nicopolazzi/collector/internal/sampler"
 	"github.com/prometheus/client_golang/api"
-	apiv1 "github.com/prometheus/client_golang/api/prometheus/v1"
+	v1 "github.com/prometheus/client_golang/api/prometheus/v1"
 )
 
 func main() {
@@ -22,15 +22,15 @@ func main() {
 		log.Fatalf("Failed to create Prometheus client: %v", err)
 	}
 
-	dataProvider := NewPrometheusProvider(apiv1.NewAPI(client))
-	sampler := NewSampler(dataProvider)
+	dataProvider := sampler.NewPrometheusProvider(v1.NewAPI(client))
+	dataSampler := sampler.NewDataSampler(dataProvider)
 
 	ticker := time.NewTicker(time.Second * 5)
 	defer ticker.Stop()
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
 	defer cancel()
 
-	var samples []PerformanceSample
+	var samples []sampler.PerformanceSample
 	for {
 		select {
 		case <-ctx.Done():
@@ -38,7 +38,7 @@ func main() {
 			return
 
 		case <-ticker.C:
-			samples = sampler.SampleClusterData(ctx)
+			samples = dataSampler.SampleClusterData(ctx)
 			log.Printf("Performance samples: %v\n", samples)
 		}
 	}

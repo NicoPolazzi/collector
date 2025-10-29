@@ -1,4 +1,4 @@
-package main
+package sampler
 
 import (
 	"cmp"
@@ -12,15 +12,15 @@ type PerformanceSample struct {
 	ThroughputRps  float64
 }
 
-type Sampler struct {
+type DataSampler struct {
 	provider PerformanceDataProvider
 }
 
-func NewSampler(provider PerformanceDataProvider) *Sampler {
-	return &Sampler{provider: provider}
+func NewDataSampler(provider PerformanceDataProvider) *DataSampler {
+	return &DataSampler{provider: provider}
 }
 
-func (s *Sampler) SampleClusterData(ctx context.Context) []PerformanceSample {
+func (s *DataSampler) SampleClusterData(ctx context.Context) []PerformanceSample {
 	const initialSamplesCount int = 0
 	responseTimes, _ := s.provider.GetResponseTime(ctx)
 	throughputs, _ := s.provider.GetThroughput(ctx)
