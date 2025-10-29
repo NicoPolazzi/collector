@@ -1,0 +1,5 @@
+#Ignore code coverage report
+coverage.txt
+
+# Ignore executable
+mqueue

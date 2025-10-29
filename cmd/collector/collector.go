@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/nicopolazzi/collector/internal/sampler"
+
 	"github.com/prometheus/client_golang/api"
 	v1 "github.com/prometheus/client_golang/api/prometheus/v1"
 )
