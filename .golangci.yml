@@ -2,20 +2,16 @@
 version: "2"
 
 run:
-  # Set a reasonable timeout for the linter (e.g., 5 minutes)
   timeout: 5m
 
 linters:
   default: none
   enable:
-    # --- Core Go Linters ---
     - govet         # Reports suspicious constructs
     - errcheck      # Checks for unhandled errors
     - staticcheck   # A huge set of static analysis checks
     - unused        # Checks for unused code
     - ineffassign   # Checks for ineffectual assignments
-    
-    # --- Style & Best Practice Linters ---
     - revive        # Fast, configurable, modern replacement for golint
     - gocritic      # Provides checks for common errors and style issues
     - unconvert     # Checks for unnecessary type conversions
@@ -28,14 +24,6 @@ linters:
           - errcheck
           - revive
 
-  settings:
-    revive:
-      enable-all-rules: true
-      rules:
-        - name: package-comments
-          disabled: true
-        - name: line-length-limit
-          arguments: [120]
 
 
 formatters:
