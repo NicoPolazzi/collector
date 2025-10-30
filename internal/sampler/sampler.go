@@ -18,7 +18,6 @@ type DataSampler struct {
 	provider performanceDataProvider
 }
 
-// NewDataSampler returns a pointer to the DataSampler. The sampler will use the provider to query for data.
 func NewDataSampler(provider performanceDataProvider) *DataSampler {
 	return &DataSampler{provider: provider}
 }

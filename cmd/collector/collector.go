@@ -1,5 +1,3 @@
-// Command collector is the main entrypoint for our application.
-// It initializes the provider and starts the data collection loop.
 package main
 
 import (

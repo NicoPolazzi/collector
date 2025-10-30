@@ -28,8 +28,6 @@ type PrometheusProvider struct {
 	api v1.API
 }
 
-// NewPrometheusProvider is a contructor for the PrometheusProvider. It accepts api that provides bindings for
-// Prometheus's v1 API.
 func NewPrometheusProvider(api v1.API) *PrometheusProvider {
 	return &PrometheusProvider{api: api}
 }

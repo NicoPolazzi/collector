@@ -12,11 +12,11 @@ type mockPerformanceDataProvider struct {
 	throughputs   []throughput
 }
 
-func (p *mockPerformanceDataProvider) getResponseTime(ctx context.Context) ([]responseTime, error) {
+func (p *mockPerformanceDataProvider) getResponseTime(_ context.Context) ([]responseTime, error) {
 	return p.responseTimes, nil
 }
 
-func (p *mockPerformanceDataProvider) getThroughput(ctx context.Context) ([]throughput, error) {
+func (p *mockPerformanceDataProvider) getThroughput(_ context.Context) ([]throughput, error) {
 	return p.throughputs, nil
 }
 
