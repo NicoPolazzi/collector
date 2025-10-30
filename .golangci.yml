@@ -16,7 +16,11 @@ linters:
     - gocritic      # Provides checks for common errors and style issues
     - unconvert     # Checks for unnecessary type conversions
     - misspell      # Corrects common misspellings in comments
+    - testifylint
   
+  settings:
+    testifylint:
+      enable-all: true
   exclusions:
     rules:
       - path: '_test\.go'
