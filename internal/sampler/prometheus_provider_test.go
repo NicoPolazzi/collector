@@ -42,7 +42,7 @@ func TestGetResponseTime(t *testing.T) {
 		{serviceName: "shippingservice", value: 75.0},
 	}
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Len(t, actual, 2)
 	assert.Equal(t, expected, actual)
 }
@@ -76,7 +76,7 @@ func TestGetThroughput(t *testing.T) {
 		{serviceName: "shippingservice", value: 75.0},
 	}
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Len(t, actual, 2)
 	assert.Equal(t, expected, actual)
 
@@ -85,7 +85,7 @@ func TestGetThroughput(t *testing.T) {
 func setupTestPrometheusAPI(t testing.TB, status int, response string) (v1.API, func()) {
 	t.Helper()
 
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(status)
 		fmt.Fprint(w, response)
 	}))
