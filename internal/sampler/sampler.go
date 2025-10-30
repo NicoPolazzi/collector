@@ -6,24 +6,27 @@ import (
 	"slices"
 )
 
+// PerformanceSample represents a sample of the performance metric of a k8s cluster.
 type PerformanceSample struct {
 	ServiceName    string
 	ResponseTimeMs float64
 	ThroughputRps  float64
 }
 
+// DataSampler is responsible to produce performance metrics' samples.
 type DataSampler struct {
-	provider PerformanceDataProvider
+	provider performanceDataProvider
 }
 
-func NewDataSampler(provider PerformanceDataProvider) *DataSampler {
+func NewDataSampler(provider performanceDataProvider) *DataSampler {
 	return &DataSampler{provider: provider}
 }
 
+// SampleClusterData produces an ordered set of PerfomanceSample. In this way we exclude not complete samples.
 func (s *DataSampler) SampleClusterData(ctx context.Context) []PerformanceSample {
 	const initialSamplesCount int = 0
-	responseTimes, _ := s.provider.GetResponseTime(ctx)
-	throughputs, _ := s.provider.GetThroughput(ctx)
+	responseTimes, _ := s.provider.getResponseTime(ctx)
+	throughputs, _ := s.provider.getThroughput(ctx)
 	responseMap := convertToMap(responseTimes)
 	throughputMap := convertToMap(throughputs)
 
@@ -45,7 +48,7 @@ func (s *DataSampler) SampleClusterData(ctx context.Context) []PerformanceSample
 	return samples
 }
 
-func convertToMap[T Metric](slice []T) map[string]float64 {
+func convertToMap[T metric](slice []T) map[string]float64 {
 	lookupMap := make(map[string]float64, len(slice))
 
 	for _, x := range slice {

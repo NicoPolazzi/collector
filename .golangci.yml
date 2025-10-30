@@ -17,23 +17,35 @@ linters:
     - unconvert     # Checks for unnecessary type conversions
     - misspell      # Corrects common misspellings in comments
     - testifylint
+    - cyclop
   
-  settings:
-    testifylint:
-      enable-all: true
+  settings: 
+     cyclop:
+      max-complexity: 30
+      package-average: 10.0
+  
   exclusions:
     rules:
+      - text: 'should have a package comment'
+        linters: [ revive ]
+      - text: 'exported \S+ \S+ should have comment( \(or a comment on this block\))? or be unexported'
+        linters: [ revive ]
       - path: '_test\.go'
         linters:
           - errcheck
-          - revive
 
 
 
 formatters:
   enable:
    - goimports
+   - golines
+  
   settings:
     goimports:
-      local-prefixes: github.com/nicopolazzi/collector
+      local-prefixes: 
+        - github.com/nicopolazzi/collector
+
+    golines:
+      max-len: 120
 

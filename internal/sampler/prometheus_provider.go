@@ -23,6 +23,7 @@ const (
 	labelDestination = "destination_service_name"
 )
 
+// The PrometheusProvider rapresents a provider of metrics contained in a Prometheus server.
 type PrometheusProvider struct {
 	api v1.API
 }
@@ -31,14 +32,14 @@ func NewPrometheusProvider(api v1.API) *PrometheusProvider {
 	return &PrometheusProvider{api: api}
 }
 
-func (p *PrometheusProvider) GetResponseTime(ctx context.Context) ([]ResponseTime, error) {
+func (p *PrometheusProvider) getResponseTime(ctx context.Context) ([]responseTime, error) {
 	result, err := p.queryPrometheus(ctx, responseTimeQuery)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return collectMetricsData[ResponseTime](result)
+	return collectMetricsData[responseTime](result)
 }
 
 // queryPrometheus is responsible to extract metrics from the Prometheus server using query.
@@ -57,7 +58,7 @@ func (p *PrometheusProvider) queryPrometheus(ctx context.Context, query string) 
 	return result, nil
 }
 
-func collectMetricsData[T ResponseTime | Throughput](result model.Value) ([]T, error) {
+func collectMetricsData[T responseTime | throughput](result model.Value) ([]T, error) {
 	vector, ok := result.(model.Vector)
 	if !ok {
 		return nil, fmt.Errorf("unexpected result type: %T", result)
@@ -77,12 +78,12 @@ func collectMetricsData[T ResponseTime | Throughput](result model.Value) ([]T, e
 	return metrics, nil
 }
 
-func (p *PrometheusProvider) GetThroughput(ctx context.Context) ([]Throughput, error) {
+func (p *PrometheusProvider) getThroughput(ctx context.Context) ([]throughput, error) {
 	result, err := p.queryPrometheus(ctx, throughputQuery)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return collectMetricsData[Throughput](result)
+	return collectMetricsData[throughput](result)
 }
