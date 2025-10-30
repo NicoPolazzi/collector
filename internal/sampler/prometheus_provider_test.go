@@ -31,20 +31,9 @@ func TestGetResponseTime(t *testing.T) {
 		}
 	}`
 
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusAccepted)
-		fmt.Fprint(w, responseTimeJSON)
-	}))
+	promAPI, closeServer := setupTestPrometheusAPI(t, http.StatusAccepted, responseTimeJSON)
+	defer closeServer()
 
-	defer server.Close()
-
-	client, err := api.NewClient(api.Config{
-		Address: server.URL,
-	})
-
-	require.NoError(t, err, "failed to create the client")
-
-	promAPI := v1.NewAPI(client)
 	provider := NewPrometheusProvider(promAPI)
 
 	actual, err := provider.getResponseTime(context.Background())
@@ -76,20 +65,9 @@ func TestGetThroughput(t *testing.T) {
 		}
 	}`
 
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusAccepted)
-		fmt.Fprint(w, throughputJSON)
-	}))
+	promAPI, closeServer := setupTestPrometheusAPI(t, http.StatusAccepted, throughputJSON)
+	defer closeServer()
 
-	defer server.Close()
-
-	client, err := api.NewClient(api.Config{
-		Address: server.URL,
-	})
-
-	require.NoError(t, err, "failed to create the client")
-
-	promAPI := v1.NewAPI(client)
 	provider := NewPrometheusProvider(promAPI)
 
 	actual, err := provider.getThroughput(context.Background())
@@ -101,4 +79,22 @@ func TestGetThroughput(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Len(t, actual, 2)
 	assert.Equal(t, expected, actual)
+
+}
+
+func setupTestPrometheusAPI(t testing.TB, status int, response string) (v1.API, func()) {
+	t.Helper()
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(status)
+		fmt.Fprint(w, response)
+	}))
+
+	client, err := api.NewClient(api.Config{
+		Address: server.URL,
+	})
+
+	require.NoError(t, err, "failed to create the client")
+
+	return v1.NewAPI(client), server.Close
 }
