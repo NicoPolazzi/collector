@@ -2,7 +2,7 @@ package sampler
 
 import "context"
 
-type PerformanceDataProvider interface {
-	GetResponseTime(ctx context.Context) ([]ResponseTime, error)
-	GetThroughput(ctx context.Context) ([]Throughput, error)
+type performanceDataProvider interface {
+	getResponseTime(ctx context.Context) ([]responseTime, error)
+	getThroughput(ctx context.Context) ([]throughput, error)
 }

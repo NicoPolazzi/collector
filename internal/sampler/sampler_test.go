@@ -8,15 +8,15 @@ import (
 )
 
 type mockPerformanceDataProvider struct {
-	responseTimes []ResponseTime
-	throughputs   []Throughput
+	responseTimes []responseTime
+	throughputs   []throughput
 }
 
-func (p *mockPerformanceDataProvider) GetResponseTime(ctx context.Context) ([]ResponseTime, error) {
+func (p *mockPerformanceDataProvider) getResponseTime(ctx context.Context) ([]responseTime, error) {
 	return p.responseTimes, nil
 }
 
-func (p *mockPerformanceDataProvider) GetThroughput(ctx context.Context) ([]Throughput, error) {
+func (p *mockPerformanceDataProvider) getThroughput(ctx context.Context) ([]throughput, error) {
 	return p.throughputs, nil
 }
 
@@ -24,7 +24,7 @@ func TestSampleClusterData(t *testing.T) {
 
 	t.Run("returns the correct sample of the cluster", func(t *testing.T) {
 		provider := &mockPerformanceDataProvider{
-			responseTimes: []ResponseTime{
+			responseTimes: []responseTime{
 				{
 					serviceName: "test-service1",
 					value:       10.33,
@@ -34,7 +34,7 @@ func TestSampleClusterData(t *testing.T) {
 					value:       12.33,
 				},
 			},
-			throughputs: []Throughput{
+			throughputs: []throughput{
 				{
 					serviceName: "test-service2",
 					value:       11.3,
@@ -67,13 +67,13 @@ func TestSampleClusterData(t *testing.T) {
 
 	t.Run("discard incomplete samples", func(t *testing.T) {
 		provider := &mockPerformanceDataProvider{
-			responseTimes: []ResponseTime{
+			responseTimes: []responseTime{
 				{
 					serviceName: "test-service2",
 					value:       10.33,
 				},
 			},
-			throughputs: []Throughput{
+			throughputs: []throughput{
 				{
 					serviceName: "test-service2",
 					value:       11.3,
